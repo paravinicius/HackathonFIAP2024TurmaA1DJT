@@ -1,18 +1,15 @@
 package br.com.fiap.postech.hackathon2024.gestaoreservas.entitites;
 
-import br.com.fiap.postech.hackathon2024.GestaoQuarto.entities.Quarto;
-import br.com.fiap.postech.hackathon2024.servicositens.entities.ServicoItem;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 @Getter
+@Setter
 @Entity
 public class Reserva {
 
@@ -24,8 +21,10 @@ public class Reserva {
 
     private LocalDate dataFim;
 
-    private List<ServicoItem> itensServicos = new ArrayList<>();
+    @ElementCollection
+    private List<Long> itensServicos = new ArrayList<>();
 
-    private List<Quarto> quartos = new ArrayList<>();
+    @ElementCollection
+    private List<Long> quartos = new ArrayList<>();
 
 }

@@ -1,18 +1,16 @@
-package br.com.fiap.postech.hackathon2024.GestaoQuarto.entities;
+package br.com.fiap.postech.hackathon2024.gestaoquarto.entities;
 
-import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Entity
+//@Entity
 @NoArgsConstructor
 @Getter //Não gerar Setter pois são dados de domínio.
-public class TipoQuarto {
+public class Comodidade {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,7 +18,7 @@ public class TipoQuarto {
     @NotEmpty(message = "O nome deve ser informado.")
     private String nome;
 
-    public TipoQuarto(Integer id, String nome) {
+    public Comodidade(Integer id, String nome) {
         if (id == null) {
             throw new IllegalArgumentException("O ID deve ser informado.");
         }
