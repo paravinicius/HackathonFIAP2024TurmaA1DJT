@@ -42,6 +42,10 @@ public class Quarto {
     @JoinColumn(name = "tipo_quarto_id")
     private TipoQuarto tipoQuarto;
 
+    @ManyToOne
+    @JoinColumn(name = "imovel_id")
+    private Imovel imovel;
+
     private Boolean isDisponivelParaNovaReserva;
 
     @ElementCollection
