@@ -31,5 +31,19 @@ public class ServicosItensController {
         return ResponseEntity.ok(servicosItens);
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<ServicosItens> atualizarServicosItens(@PathVariable Long id, @RequestBody ServicosItens servicosItens) {
+        ServicosItens servicosItensAtualizado = servicosItensService.atualizarServicosItens(id, servicosItens);
+        if (servicosItensAtualizado != null) {
+            return ResponseEntity.ok(servicosItensAtualizado);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    public ResponseEntity<Void> deletarServicosItens(@PathVariable Long id) {
+        servicosItensService.deletarServicosItens(id);
+        return ResponseEntity.noContent().build();
+    }
 
 }
