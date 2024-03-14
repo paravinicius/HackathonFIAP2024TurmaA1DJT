@@ -1,6 +1,6 @@
 package br.com.fiap.postech.hackathon2024.servicositens.services;
 
-import br.com.fiap.postech.hackathon2024.servicositens.entities.ServicosItens;
+import br.com.fiap.postech.hackathon2024.servicositens.entities.ServicoItem;
 import br.com.fiap.postech.hackathon2024.servicositens.repositories.ServicosItensRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,18 +16,18 @@ public class ServicosItensService {
     public ServicosItensService(ServicosItensRepository servicosItensRepository) {
         this.servicosItensRepository = servicosItensRepository;
     }
-    public ServicosItens criarServicosItens(ServicosItens servicosItens) {
-        return servicosItensRepository.save(servicosItens);
+    public ServicoItem criarServicosItens(ServicoItem servicoItem) {
+        return servicosItensRepository.save(servicoItem);
     }
 
-    public List<ServicosItens> buscarTodosServicosItens() {
+    public List<ServicoItem> buscarTodosServicosItens() {
         return servicosItensRepository.findAll();
     }
 
-    public ServicosItens atualizarServicosItens(Long id, ServicosItens servicosItens) {
-        ServicosItens servicosItensExistente = servicosItensRepository.findById(id).orElse(null);
-        if (servicosItensExistente != null) {
-            return servicosItensRepository.save(servicosItens);
+    public ServicoItem atualizarServicosItens(Long id, ServicoItem servicoItem) {
+        ServicoItem servicoItemExistente = servicosItensRepository.findById(id).orElse(null);
+        if (servicoItemExistente != null) {
+            return servicosItensRepository.save(servicoItem);
         } else {
             return null;
         }

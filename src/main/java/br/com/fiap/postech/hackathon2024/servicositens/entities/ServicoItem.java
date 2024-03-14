@@ -12,7 +12,7 @@ import java.math.BigDecimal;
 
 @Getter
 @Entity
-public class ServicosItens {
+public class ServicoItem {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,9 +24,9 @@ public class ServicosItens {
     @NotNull
     private BigDecimal valor;
 
-    public ServicosItens() {}
+    public ServicoItem() {}
 
-    public ServicosItens(String nome, BigDecimal valor) {
+    public ServicoItem(String nome, BigDecimal valor) {
         this.nome = nome;
         this.valor = valor;
     }
