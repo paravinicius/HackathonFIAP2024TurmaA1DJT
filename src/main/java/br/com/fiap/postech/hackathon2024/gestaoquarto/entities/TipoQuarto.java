@@ -1,31 +1,33 @@
 package br.com.fiap.postech.hackathon2024.gestaoquarto.entities;
 
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.validation.constraints.NotEmpty;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import jakarta.persistence.*;
 
-//@Entity
-@NoArgsConstructor
-@Getter //Não gerar Setter pois são dados de domínio.
-public class TipoQuarto {
+@Entity
+@Table(name = "tipos_quarto")
+public enum TipoQuarto {
+
+    STANDARD("Standard"),
+    LUXO("Luxo"),
+    DUPLEX("Duplex"),
+    TRIPLEX("Triplex"),
+    INDIVIDUAL("Individual");
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
-    @NotEmpty(message = "O nome deve ser informado.")
-    private String nome;
+    private Long id;
+    private String descricao;
 
-    public TipoQuarto(Integer id, String nome) {
-        if (id == null) {
-            throw new IllegalArgumentException("O ID deve ser informado.");
-        }
-        if (nome == null || nome.isEmpty()) {
-            throw new IllegalArgumentException("O nome deve ser informado.");
-        }
-        this.id = id;
-        this.nome = nome;
+    TipoQuarto() {}
+
+    TipoQuarto(String descricao) {
+        this.descricao = descricao;
+    }
+    public String getDescricao() {
+        return descricao;
+    }
+
+    @Override
+    public String toString() {
+        return descricao;
     }
 }
