@@ -6,4 +6,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ServicosItensRepository extends JpaRepository<ServicoItem, Long> {
+
+    public ServicoItem getById(Long id);
 }
