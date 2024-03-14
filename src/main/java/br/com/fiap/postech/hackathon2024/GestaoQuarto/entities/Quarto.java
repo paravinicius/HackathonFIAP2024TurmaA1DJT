@@ -1,14 +1,22 @@
 package br.com.fiap.postech.hackathon2024.GestaoQuarto.entities;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
+@Entity
+@NoArgsConstructor
 @Getter
 public class Quarto {
-    @NotNull (message = "O ID deve ser informado.")
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     @NotNull (message = "A disponibilidade para nova reserva deve ser informada.")
     private Boolean isDisponivelParaNovaReserva;

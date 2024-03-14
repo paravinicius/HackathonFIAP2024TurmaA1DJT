@@ -1,13 +1,21 @@
 package br.com.fiap.postech.hackathon2024.GestaoQuarto.entities;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
+@Entity
+@NoArgsConstructor
 @Getter //Não gerar Setter pois são dados de domínio.
 public class TipoCama {
 
-    @NotNull(message = "O ID deve ser informado.")
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     @NotEmpty(message = "O nome deve ser informado.")
     private String nome;

@@ -1,13 +1,23 @@
 package br.com.fiap.postech.hackathon2024.GestaoQuarto.entities;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.util.regex.Pattern;
 
+@Entity
+@NoArgsConstructor
 @Getter
 public class Endereco {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
     @NotEmpty(message = "O logradouro deve ser informado.")
     private String logradouro;
     @NotEmpty(message = "O CEP deve ser informado.")
