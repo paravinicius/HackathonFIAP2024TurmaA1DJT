@@ -1,4 +1,4 @@
-package br.com.fiap.postech.hackathon2024.entity;
+package br.com.fiap.postech.hackathon2024.GestaoQuarto.entities;
 
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Getter;
