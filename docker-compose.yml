@@ -1,31 +1,12 @@
-version: '1'
+version: '3.8'
+
 services:
-  db:
-    image: mysql:8.0
-    environment:
-      MYSQL_ROOT_PASSWORD: rootpassword
-      MYSQL_DATABASE: HotelHackathonMyDatabase
-      MYSQL_USER: myuser
-      MYSQL_PASSWORD: mypassword
-    ports:
-      - 3306:3306
-    expose:
-      - 3306
-      - 33060
-    volumes:
-      - db_data:/var/lib/mysql
-    restart: always
-
   app:
-    image: amazoncorretto:17
+    image: 'hacka-fiap:latest'
+    build:
+      context: .
+    container_name: app
     ports:
-      - 8080:8080
-    expose:
-      - 8080
-    restart: always
-    depends_on:
-      - db
-    entrypoint: ["java", "-jar", "./target/app.jar"]
+      - "8080:8080"
 
-volumes:
-  db_data:
+ 
