@@ -36,6 +36,14 @@ public class QuartoService {
         return quartoRepository.findById(id).orElse(null);
     }
 
+    public Quarto bloquearQuarto(Long id) {
+        Quarto quartoExistente = quartoRepository.findById(id).orElse(null);
+        if (quartoExistente != null) {
+            quartoExistente.setIsDisponivelParaNovaReserva(!quartoExistente.getIsDisponivelParaNovaReserva());
+            quartoRepository.save(quartoExistente);
+        }
+        return quartoExistente;
+    }
     public Quarto atualizarQuarto(Long id, Quarto quarto) {
         Quarto quartoExistente = quartoRepository.findById(id).orElse(null);
         if (quartoExistente != null) {
@@ -77,7 +85,7 @@ public class QuartoService {
         List<Quarto> quartosDisponiveis = new ArrayList<>();
 
         for (Quarto quarto : todosQuartos) {
-            if (quarto.getCapacidadeMaximaPessoas() >= totalPessoas && !quarto.isOcupado(dataInicio, dataFim)) {
+            if (quarto.getCapacidadeMaximaPessoas() >= totalPessoas && !quarto.isOcupado(dataInicio, dataFim) && quarto.getIsDisponivelParaNovaReserva()) {
                 quartosDisponiveis.add(quarto);
             }
         }

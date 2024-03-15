@@ -1,9 +1,9 @@
 package br.com.fiap.postech.hackathon2024.gestaoclientes.entities;
 
-import br.com.fiap.postech.hackathon2024.gestaoclientes.controllers.dto.DadosCadastroCliente;
 import br.com.fiap.postech.hackathon2024.gestaoreservas.entitites.Reserva;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
-
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
@@ -58,16 +58,5 @@ public class Cliente {
 
     @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL)
     private List<Reserva> reservas;
-    public Cliente(DadosCadastroCliente dados) {
-        this.id = dados.id();
-        this.paisDeOrigem = dados.paisDeOrigem();
-        this.cpf = dados.cpf();
-        this.passaporte = dados.passaporte();
-        this.nomeCompleto = dados.nomeCompleto();
-        this.dataNascimento = dados.dataNascimento();
-        this.enderecoPaisOrigem = dados.paisDeOrigem();
-        this.telefone = dados.telefone();
-        this.email = dados.email();
-    }
 }
 

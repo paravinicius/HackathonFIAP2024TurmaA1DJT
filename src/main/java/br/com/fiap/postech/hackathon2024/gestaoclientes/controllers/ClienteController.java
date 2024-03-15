@@ -1,34 +1,55 @@
 package br.com.fiap.postech.hackathon2024.gestaoclientes.controllers;
 
 import br.com.fiap.postech.hackathon2024.gestaoclientes.entities.Cliente;
-import br.com.fiap.postech.hackathon2024.gestaoclientes.repositories.ClienteRepository;
-import br.com.fiap.postech.hackathon2024.gestaoclientes.controllers.dto.DadosCadastroCliente;
 import br.com.fiap.postech.hackathon2024.gestaoclientes.services.ClienteService;
+import br.com.fiap.postech.hackathon2024.gestaoservicositens.exceptions.ServicoItemNaoEncontradoException;
 import jakarta.transaction.Transactional;
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.util.UriComponentsBuilder;
-import org.json.JSONObject;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
-@RequestMapping("cliente")
+@RequestMapping("/cliente")
 public class ClienteController {
     @Autowired
-    private ClienteService service;
+    private ClienteService clienteService;
 
     @PostMapping
     @Transactional
-    public ResponseEntity<Cliente> cadastrar (@RequestBody @Valid DadosCadastroCliente dados, UriComponentsBuilder uriBuilder){
-        JSONObject response = new JSONObject();
-        var cliente = new Cliente(dados);
-        var retorno = service.cadastrarCliente(cliente);
-        response.put("message","cliente cadastrado com sucesso");
-        return ResponseEntity.status(HttpStatus.OK).body(retorno);
+    public ResponseEntity<Cliente> cadastrarCliente(@RequestBody Cliente cliente) {
+        Cliente novoCliente = clienteService.cadastrarCliente(cliente);
+        return ResponseEntity.status(HttpStatus.CREATED).body(novoCliente);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<Cliente>> buscarTodosClientes() {
+        List<Cliente> clientes = clienteService.buscarTodosOsClientes();
+        return ResponseEntity.ok(clientes);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Cliente> atualizarCliente(@PathVariable Long id, @RequestBody Cliente cliente) {
+        try {
+            Cliente clienteAtualizado = clienteService.atualizarCliente(id, cliente);
+            if (clienteAtualizado != null) {
+                return ResponseEntity.ok(clienteAtualizado);
+            }
+        } catch (RuntimeException e) {
+            throw new ServicoItemNaoEncontradoException(id);
+        }
+        return ResponseEntity.notFound().build();
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deletarCliente(@PathVariable Long id) {
+        try {
+            clienteService.deletarCliente(id);
+            return ResponseEntity.noContent().build();
+        } catch (RuntimeException e) {
+            throw new ServicoItemNaoEncontradoException(id);
+        }
     }
 }
