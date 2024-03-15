@@ -22,7 +22,7 @@ public class Quarto {
 
     private BigDecimal valorDiaria;
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL )
     @JoinTable(
             name = "quartos_comodidades",
             joinColumns = @JoinColumn(name = "quarto_id"),
@@ -30,7 +30,7 @@ public class Quarto {
     )
     private List<Comodidade> comodidades;
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable(
             name = "quartos_tipos_cama",
             joinColumns = @JoinColumn(name = "quarto_id"),
@@ -38,11 +38,11 @@ public class Quarto {
     )
     private List<TipoCama> tiposCamas;
 
-    @OneToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "tipo_quarto_id")
     private TipoQuarto tipoQuarto;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "imovel_id")
     private Imovel imovel;
 

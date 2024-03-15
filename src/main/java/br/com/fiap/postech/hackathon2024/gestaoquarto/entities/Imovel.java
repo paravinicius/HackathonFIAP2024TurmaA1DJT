@@ -9,6 +9,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "imoveis")
+@NoArgsConstructor
 public class Imovel {
 
     @Id
@@ -23,8 +24,6 @@ public class Imovel {
 
     @OneToMany(mappedBy = "imovel")
     private List<Quarto> quartos;
-
-    public Imovel() {}
 
     public Imovel(Long id, String nome, List<Quarto> quartos) {
         if (id == null) {

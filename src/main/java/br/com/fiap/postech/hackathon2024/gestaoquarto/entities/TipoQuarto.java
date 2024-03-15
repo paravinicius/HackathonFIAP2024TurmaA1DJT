@@ -17,11 +17,14 @@ public enum TipoQuarto {
     private Long id;
     private String descricao;
 
-    TipoQuarto() {}
-
     TipoQuarto(String descricao) {
         this.descricao = descricao;
     }
+
+    TipoQuarto() {
+
+    }
+
     public String getDescricao() {
         return descricao;
     }

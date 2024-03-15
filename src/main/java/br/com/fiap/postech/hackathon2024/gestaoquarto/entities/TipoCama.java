@@ -1,6 +1,7 @@
 package br.com.fiap.postech.hackathon2024.gestaoquarto.entities;
 
 import jakarta.persistence.*;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "tipos_cama")
