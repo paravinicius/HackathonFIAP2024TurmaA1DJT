@@ -1,0 +1,110 @@
+{
+	"info": {
+		"_postman_id": "c911d4fd-3e1c-48ba-882e-35882e61cff7",
+		"name": "Hackathon FIAP 2024",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "8322243",
+		"_collection_link": "https://universal-desert-545973.postman.co/workspace/FIAP-Grupo-60~e4489f92-c0e6-419c-ad95-b19ba56fc0e9/collection/8322243-c911d4fd-3e1c-48ba-882e-35882e61cff7?action=share&source=collection_link&creator=8322243"
+	},
+	"item": [
+		{
+			"name": "servicos-itens/pobuscarTodosServicosItens",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "http://localhost:8080/servicos-itens"
+			},
+			"response": []
+		},
+		{
+			"name": "servicos-itens/criarServicosItens",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"capacidadeMaximaPessoas\": 2,\r\n  \"valorDiaria\": 150.0,\r\n  \"isDisponivelParaNovaReserva\": true,\r\n  \"datasOcupadas\": [\r\n    \"2024-03-15\",\r\n    \"2024-03-16\",\r\n    \"2024-03-17\"\r\n  ]\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost:8080/servicos-itens/criarServicosItens"
+			},
+			"response": []
+		},
+		{
+			"name": "servicos-quartos/criarQuarto",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"capacidadeMaximaPessoas\": 3,\r\n  \"valorDiaria\": 140.15,\r\n  \"comodidades\": [\"SOFA\", \"POLTRONAS\"],\r\n  \"tiposCamas\": [\"CASAL\",\"QUEEN_SIZE\"],\r\n  \"tipoQuarto\": \"LUXO\",\r\n  \"isDisponivelParaNovaReserva\": \"TRUE\",\r\n  \"datasOcupadas\": [\"2024-03-15\", \"2024-03-16\", \"2024-03-17\"]\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost:8080/quartos"
+			},
+			"response": []
+		},
+		{
+			"name": "servicos-quartos/buscarTodosQuartos",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "http://localhost:8080/quartos"
+			},
+			"response": []
+		},
+		{
+			"name": "servicos-endereco/criarEndereco",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"logradouro\": \"Rua das Flores\",\r\n  \"cep\": \"70000-000\",\r\n  \"cidade\": \"Brasília\",\r\n  \"estado\": \"DF\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost:8080/enderecos"
+			},
+			"response": []
+		},
+		{
+			"name": "servicos-endereco/buscarTodosEnderecos",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "http://localhost:8080/enderecos"
+			},
+			"response": []
+		},
+		{
+			"name": "servicos-endereco/atualizarEndereco",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"id\": 1,\r\n    \"logradouro\": \"Alameda das Flores\",\r\n    \"cep\": \"71901-000\",\r\n    \"cidade\": \"Brasília\",\r\n    \"estado\": \"DF\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost:8080/enderecos/1"
+			},
+			"response": []
+		}
+	]
+}
