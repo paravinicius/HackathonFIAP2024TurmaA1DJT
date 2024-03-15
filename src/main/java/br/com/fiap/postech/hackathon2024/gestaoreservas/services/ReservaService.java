@@ -35,6 +35,7 @@ public class ReservaService {
     @Autowired
     private final EntityManager entityManager;
 
+
     public ReservaService(ReservaRepository reservaRepository, EntityManager entityManager, QuartoService quartoService, ClienteService clienteService) {
         this.reservaRepository = reservaRepository;
         this.entityManager = entityManager;
@@ -54,6 +55,30 @@ public class ReservaService {
         reservaRepository.save(reserva);
     }
 
+    public String gerarTextoFinalReserva(Long reservaId) {
+        Reserva reserva = this.buscarReservaPorId(reservaId).orElse(null);
+        List<Quarto> quartos = this.recuperaQuartosReserva(reservaId);
+        List<ServicoItem> servicosItens = this.recuperaItensServicosPorReserva(reservaId);
+        String textoQuartos = this.construirMensagemQuartos(quartos);
+        var totalDias = this.calcularTotalDias(reserva);
+        String totaldeDias = "Estes quartos foram alugados por um total de " + totalDias + " dias.";
+        String textoServicosItens = this.construirMensagemServicos(servicosItens);
+        var precoTotalQuartos = this.calcularCustoDosQuartosDaReserva(reserva);
+        String textoPrecoQuartos = "O custo total dos quartos para esta reserva é de: R$" + precoTotalQuartos;
+        var precoTotalServicos = this.calcularCustoDosServicosItensDaReserva(servicosItens);
+        String textoPrecoServicos = "O custo total dos itens e serviços para esta reserva é de: R$" + precoTotalServicos;
+        var precoFinal = precoTotalQuartos.add(precoTotalServicos);
+        String finalizar = "Somando tudo, o valor da reserva é de R$" + precoFinal + ". \n\nReserva finalizada!";
+        StringBuilder sb = new StringBuilder();
+        sb.append(textoQuartos + "\n");
+        sb.append(totaldeDias + "\n");
+        sb.append(textoServicosItens + "\n");
+        sb.append(textoPrecoQuartos + "\n");
+        sb.append(textoPrecoServicos + "\n");
+        sb.append(finalizar);
+        return sb.toString();
+    }
+
     public List<Quarto> recuperaQuartosReserva(Long id) {
         Reserva reserva = entityManager.find(Reserva.class, id);
         List<Long> idsQuartos = reserva.getQuartos();
@@ -63,6 +88,12 @@ public class ReservaService {
             resultados.add(quarto);
         }
         return resultados;
+    }
+
+    public Long calcularTotalDias(Reserva reserva) {
+        var dataInicio = reserva.getDataInicio();
+        var dataFim = reserva.getDataFim();
+        return ChronoUnit.DAYS.between(dataInicio, dataFim) + 1;
     }
 
     public BigDecimal calcularCustoDosQuartosDaReserva(Reserva reserva) {
@@ -110,6 +141,27 @@ public class ReservaService {
             resultados.add(servicoItem);
         }
         return resultados;
+    }
+
+    public String construirMensagemServicos(List<ServicoItem> servicos) {
+        StringBuilder mensagem = new StringBuilder();
+        mensagem.append("Na sua reserva, estão incluídos os seguintes itens e serviços: ");
+        for (ServicoItem servico : servicos) {
+            mensagem.append(servico.getNome()).append(", ");
+        }
+        mensagem.deleteCharAt(mensagem.length() - 2);
+        return mensagem.toString();
+    }
+
+    public String construirMensagemQuartos(List<Quarto> quartos) {
+        StringBuilder mensagem = new StringBuilder();
+        mensagem.append("Na sua reserva, foram incluídos ").append(quartos.size()).append(" quartos, dos tipos: ");
+        for (Quarto quarto : quartos) {
+            mensagem.append(quarto.getTipoQuarto()).append(", ");
+        }
+        mensagem.deleteCharAt(mensagem.length() - 2);
+
+        return mensagem.toString();
     }
 
     public BigDecimal calcularCustoDosServicosItensDaReserva(List<ServicoItem> lista) {
