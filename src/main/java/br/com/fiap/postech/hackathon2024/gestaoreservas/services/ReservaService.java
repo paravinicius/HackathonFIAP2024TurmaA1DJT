@@ -1,16 +1,19 @@
 package br.com.fiap.postech.hackathon2024.gestaoreservas.services;
 
 import br.com.fiap.postech.hackathon2024.gestaoquarto.entities.Quarto;
+import br.com.fiap.postech.hackathon2024.gestaoquarto.services.QuartoService;
 import br.com.fiap.postech.hackathon2024.gestaoreservas.entitites.Reserva;
 import br.com.fiap.postech.hackathon2024.gestaoreservas.repositories.ReservaRepository;
 import br.com.fiap.postech.hackathon2024.gestaoservicositens.entities.ServicoItem;
-import br.com.fiap.postech.hackathon2024.gestaoservicositens.repositories.ServicoItemRepository;
 import jakarta.persistence.EntityManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -22,11 +25,14 @@ public class ReservaService {
     private final ReservaRepository reservaRepository;
 
     @Autowired
+    private final QuartoService quartoService;
+    @Autowired
     private final EntityManager entityManager;
 
-    public ReservaService(ReservaRepository reservaRepository, EntityManager entityManager) {
+    public ReservaService(ReservaRepository reservaRepository, EntityManager entityManager, QuartoService quartoService) {
         this.reservaRepository = reservaRepository;
         this.entityManager = entityManager;
+        this.quartoService = quartoService;
     }
 
     public void adicionarItensServicosNaReserva(Long reservaId, List<Long> idsItensServicos) {
@@ -88,10 +94,30 @@ public class ReservaService {
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
     @Transactional
-    public void atualizarReserva(Reserva reserva) {
+    public void adicionarDatasNaReserva(Reserva reserva, LocalDate dataInicio, LocalDate dataFim) {
         if (reserva == null || reserva.getId() == null) {
             throw new RuntimeException("Reserva inválida");
         }
+        if (!isValidDate(dataInicio.toString()) || !isValidDate(dataFim.toString())) {
+            throw new RuntimeException("Datas inválidas");
+        }
+        reserva.setDataInicio(dataInicio);
+        reserva.setDataFim(dataFim);
         entityManager.merge(reserva);
+
+        for (Long quartoId: reserva.getQuartos()) {
+            Quarto quarto = quartoService.buscarQuartoPorId(quartoId);
+            quartoService.adicionarDatasOcupadasNoQuarto(dataInicio, dataFim, quarto);
+            quartoService.atualizarQuarto(quarto);
+        }
+    }
+
+    private boolean isValidDate(String date) {
+        try {
+            LocalDate.parse(date, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+            return true;
+        } catch (DateTimeParseException e) {
+            return false;
+        }
     }
 }

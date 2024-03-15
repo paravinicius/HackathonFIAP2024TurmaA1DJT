@@ -97,21 +97,11 @@ public class ReservaController {
                                                    @RequestParam @DateTimeFormat(pattern = "dd-MM-yyyy") String dataInicio,
                                                    @RequestParam @DateTimeFormat(pattern = "dd-MM-yyyy") String dataFim) {
         var reserva = reservaService.buscarReservaPorId(id).orElse(null);
-        if (!isValidDate(dataInicio) || !isValidDate(dataFim)) {
-            return ResponseEntity.badRequest().body("Datas inválidas");
-        }
-        reserva.setDataInicio(LocalDate.parse(dataInicio, DateTimeFormatter.ofPattern("dd-MM-yyyy")));
-        reserva.setDataFim(LocalDate.parse(dataFim, DateTimeFormatter.ofPattern("dd-MM-yyyy")));
-        reservaService.atualizarReserva(reserva);
+        var dataInicioLocalDate = LocalDate.parse(dataInicio, DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+        var dataFimLocalDate = LocalDate.parse(dataFim, DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+        reservaService.adicionarDatasNaReserva(reserva, dataInicioLocalDate, dataFimLocalDate);
         return ResponseEntity.ok("Datas de início e final adicionadas com sucesso na reserva");
     }
 
-    private boolean isValidDate(String date) {
-        try {
-            LocalDate.parse(date, DateTimeFormatter.ofPattern("dd-MM-yyyy"));
-            return true;
-        } catch (DateTimeParseException e) {
-            return false;
-        }
-    }
+
 }
