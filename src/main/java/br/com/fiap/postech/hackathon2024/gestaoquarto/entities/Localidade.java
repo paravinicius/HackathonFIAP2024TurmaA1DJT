@@ -16,7 +16,7 @@ public class Localidade {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Enumerated(EnumType.STRING)
+    @Enumerated(EnumType.ORDINAL)
     private List<Amenidade> amenidades;
 
     @OneToOne

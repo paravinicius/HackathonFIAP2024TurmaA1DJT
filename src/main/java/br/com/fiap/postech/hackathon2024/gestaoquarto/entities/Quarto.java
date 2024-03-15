@@ -22,24 +22,13 @@ public class Quarto {
 
     private BigDecimal valorDiaria;
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL )
-    @JoinTable(
-            name = "quartos_comodidades",
-            joinColumns = @JoinColumn(name = "quarto_id"),
-            inverseJoinColumns = @JoinColumn(name = "comodidade_id")
-    )
+    @Enumerated(EnumType.ORDINAL)
     private List<Comodidade> comodidades;
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinTable(
-            name = "quartos_tipos_cama",
-            joinColumns = @JoinColumn(name = "quarto_id"),
-            inverseJoinColumns = @JoinColumn(name = "tipo_cama_id")
-    )
+    @Enumerated(EnumType.ORDINAL)
     private List<TipoCama> tiposCamas;
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "tipo_quarto_id")
+    @Enumerated(EnumType.ORDINAL)
     private TipoQuarto tipoQuarto;
 
     @ManyToOne(cascade = CascadeType.ALL)
@@ -54,9 +43,6 @@ public class Quarto {
     private List<LocalDate> datasOcupadas;
 
     public Quarto(Integer id, Boolean isDisponivelParaNovaReserva, Integer capacidadeMaximaPessoas, BigDecimal valorDiaria, List<Comodidade> comodidades, List<TipoCama> tiposCamas, TipoQuarto tipoQuarto) {
-        if (id == null) {
-            throw new IllegalArgumentException("O ID deve ser informado.");
-        }
         if (isDisponivelParaNovaReserva == null) {
             throw new IllegalArgumentException("A disponibilidade para nova reserva deve ser informada.");
         }

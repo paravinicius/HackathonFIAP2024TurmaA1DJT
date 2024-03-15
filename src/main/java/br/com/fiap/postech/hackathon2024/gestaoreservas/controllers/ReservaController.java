@@ -1,5 +1,6 @@
 package br.com.fiap.postech.hackathon2024.gestaoreservas.controllers;
 
+import br.com.fiap.postech.hackathon2024.gestaoquarto.entities.Quarto;
 import br.com.fiap.postech.hackathon2024.gestaoreservas.entitites.Reserva;
 import br.com.fiap.postech.hackathon2024.gestaoreservas.services.ReservaService;
 import br.com.fiap.postech.hackathon2024.gestaoservicositens.entities.ServicoItem;
@@ -43,7 +44,7 @@ public class ReservaController {
         return ResponseEntity.status(HttpStatus.CREATED).body(novaReserva);
     }
 
-    @PostMapping("/{reservaId}/itens-servicos")
+    @PutMapping("/{reservaId}/itens-servicos")
     public ResponseEntity<?> adicionarItensNaReserva(@PathVariable Long reservaId, @RequestBody List<Long> idsItensServicos) {
         try {
             reservaService.adicionarItensServicosNaReserva(reservaId, idsItensServicos);
@@ -52,6 +53,30 @@ public class ReservaController {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao adicionar itens e serviços na reserva: " + e.getMessage());
         }
+    }
+
+    @PutMapping("/{reservaId}/quartos")
+    public ResponseEntity<?> adicionarQuartosNaReserva(@PathVariable Long reservaId, @RequestBody List<Long> idsItensServicos) {
+        try {
+            reservaService.adicionarQuartosNaReserva(reservaId, idsItensServicos);
+            Integer size = idsItensServicos.size();
+            return ResponseEntity.ok(size + " quartos adicionados com sucesso na reserva");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao adicionar quartos na reserva: " + e.getMessage());
+        }
+    }
+
+    @GetMapping ("/{reservaId}/quartos/calcular-total")
+    public ResponseEntity<String> calcularPrecoQuartosReserva(@PathVariable Long reservaId) {
+        List<Quarto> resultados = reservaService.recuperaQuartosReserva(reservaId);
+        var total = reservaService.calcularCustoDosQuartosDaReserva(resultados);
+        return ResponseEntity.ok("O custo total dos quartos para esta reserva é de: R$" + total);
+    }
+
+    @GetMapping ("/{reservaId}/quartos")
+    public ResponseEntity<List<Quarto>> buscarQuartosNaReserva(@PathVariable Long reservaId) {
+        List<Quarto> resultados = reservaService.recuperaQuartosReserva(reservaId);
+        return ResponseEntity.ok(resultados);
     }
 
     @GetMapping ("/{reservaId}/itens-servicos/calcular-total")
@@ -78,7 +103,7 @@ public class ReservaController {
         reserva.setDataInicio(LocalDate.parse(dataInicio, DateTimeFormatter.ofPattern("dd-MM-yyyy")));
         reserva.setDataFim(LocalDate.parse(dataFim, DateTimeFormatter.ofPattern("dd-MM-yyyy")));
         reservaService.atualizarReserva(reserva);
-        return ResponseEntity.ok(reserva);
+        return ResponseEntity.ok("Datas de início e final adicionadas com sucesso na reserva");
     }
 
     private boolean isValidDate(String date) {

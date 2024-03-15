@@ -1,9 +1,6 @@
 package br.com.fiap.postech.hackathon2024.gestaoquarto.entities;
 
 import jakarta.persistence.*;
-
-@Entity
-@Table(name = "tipos_quarto")
 public enum TipoQuarto {
 
     STANDARD("Standard"),
@@ -12,21 +9,10 @@ public enum TipoQuarto {
     TRIPLEX("Triplex"),
     INDIVIDUAL("Individual");
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    private String descricao;
+    private final String descricao;
 
     TipoQuarto(String descricao) {
         this.descricao = descricao;
-    }
-
-    TipoQuarto() {
-
-    }
-
-    public String getDescricao() {
-        return descricao;
     }
 
     @Override
