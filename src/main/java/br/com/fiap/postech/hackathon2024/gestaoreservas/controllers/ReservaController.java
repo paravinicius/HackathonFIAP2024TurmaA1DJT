@@ -42,8 +42,11 @@ public class ReservaController {
     }
 
     @PostMapping
-    public ResponseEntity<Reserva> criarReserva() {
-        Reserva novaReserva = reservaService.criarReserva();
+    public ResponseEntity<?> criarReserva(@RequestParam(name = "clienteId", required = false) Long clienteId) {
+        if (clienteId == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Cliente não está logado");
+        }
+        Reserva novaReserva = reservaService.criarReserva(clienteId);
         return ResponseEntity.status(HttpStatus.CREATED).body(novaReserva);
     }
 
@@ -71,8 +74,8 @@ public class ReservaController {
 
     @GetMapping ("/{reservaId}/quartos/calcular-total")
     public ResponseEntity<String> calcularPrecoQuartosReserva(@PathVariable Long reservaId) {
-        List<Quarto> resultados = reservaService.recuperaQuartosReserva(reservaId);
-        var total = reservaService.calcularCustoDosQuartosDaReserva(resultados);
+        Reserva reserva = reservaService.buscarReservaPorId(reservaId).orElse(null);
+        var total = reservaService.calcularCustoDosQuartosDaReserva(reserva);
         return ResponseEntity.ok("O custo total dos quartos para esta reserva é de: R$" + total);
     }
 

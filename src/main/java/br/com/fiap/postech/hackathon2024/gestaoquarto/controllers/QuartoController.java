@@ -3,7 +3,6 @@ package br.com.fiap.postech.hackathon2024.gestaoquarto.controllers;
 import br.com.fiap.postech.hackathon2024.gestaoquarto.entities.Quarto;
 import br.com.fiap.postech.hackathon2024.gestaoquarto.exceptions.QuartoNaoEncontradoException;
 import br.com.fiap.postech.hackathon2024.gestaoquarto.services.QuartoService;
-import br.com.fiap.postech.hackathon2024.gestaoservicositens.entities.ServicoItem;
 import br.com.fiap.postech.hackathon2024.gestaoservicositens.exceptions.ServicoItemNaoEncontradoException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -54,6 +53,11 @@ public class QuartoController {
             throw new ServicoItemNaoEncontradoException(id);
         }
         return ResponseEntity.notFound().build();
+    }
+    @PutMapping("/{id}/bloquear")
+    public ResponseEntity<Quarto> bloquearQuartoParaReserva(@PathVariable Long id) {
+        Quarto quartoAtualizado = quartoService.bloquearQuarto(id);
+        return ResponseEntity.ok(quartoAtualizado);
     }
 
     @DeleteMapping("/{id}")

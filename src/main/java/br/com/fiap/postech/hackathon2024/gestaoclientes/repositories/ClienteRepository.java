@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.PathVariable;
 
 @Repository
-public interface ClienteRepository extends JpaRepository<Cliente, Integer> {
-    Cliente getReferenceById(PathVariable id);
+public interface ClienteRepository extends JpaRepository<Cliente, Long> {
+
 }

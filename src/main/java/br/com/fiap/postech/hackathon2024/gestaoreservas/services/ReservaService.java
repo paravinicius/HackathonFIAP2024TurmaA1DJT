@@ -1,5 +1,7 @@
 package br.com.fiap.postech.hackathon2024.gestaoreservas.services;
 
+import br.com.fiap.postech.hackathon2024.gestaoclientes.entities.Cliente;
+import br.com.fiap.postech.hackathon2024.gestaoclientes.services.ClienteService;
 import br.com.fiap.postech.hackathon2024.gestaoquarto.entities.Quarto;
 import br.com.fiap.postech.hackathon2024.gestaoquarto.services.QuartoService;
 import br.com.fiap.postech.hackathon2024.gestaoreservas.entitites.Reserva;
@@ -14,6 +16,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -25,14 +28,18 @@ public class ReservaService {
     private final ReservaRepository reservaRepository;
 
     @Autowired
+    private final ClienteService clienteService;
+
+    @Autowired
     private final QuartoService quartoService;
     @Autowired
     private final EntityManager entityManager;
 
-    public ReservaService(ReservaRepository reservaRepository, EntityManager entityManager, QuartoService quartoService) {
+    public ReservaService(ReservaRepository reservaRepository, EntityManager entityManager, QuartoService quartoService, ClienteService clienteService) {
         this.reservaRepository = reservaRepository;
         this.entityManager = entityManager;
         this.quartoService = quartoService;
+        this.clienteService = clienteService;
     }
 
     public void adicionarItensServicosNaReserva(Long reservaId, List<Long> idsItensServicos) {
@@ -58,14 +65,31 @@ public class ReservaService {
         return resultados;
     }
 
-    public BigDecimal calcularCustoDosQuartosDaReserva(List<Quarto> lista) {
-        return lista.stream()
-                .map(Quarto::getValorDiaria)
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
+    public BigDecimal calcularCustoDosQuartosDaReserva(Reserva reserva) {
+        LocalDate dataInicio = reserva.getDataInicio();
+        LocalDate dataFim = reserva.getDataFim();
+        long totalDias = ChronoUnit.DAYS.between(dataInicio, dataFim) + 1;
+
+        List<Long> idsQuartos = reserva.getQuartos();
+        List<Quarto> quartos = new ArrayList<>();
+        for (Long idQuarto : idsQuartos) {
+            Quarto quarto = quartoService.buscarQuartoPorId(idQuarto);
+            if (quarto != null) {
+                quartos.add(quarto);
+            }
+        }
+        double totalGeral = 0.0;
+        for (Quarto quarto : quartos) {
+            double totalQuarto = quarto.getValorDiaria().doubleValue() * totalDias;
+            totalGeral += totalQuarto;
+        }
+        return BigDecimal.valueOf(totalGeral);
     }
 
-    public Reserva criarReserva() {
+    public Reserva criarReserva(Long clienteId) {
+        Cliente cliente = clienteService.buscarClientePorId(clienteId);
         Reserva reserva = new Reserva();
+        reserva.setCliente(cliente);
         return reservaRepository.save(reserva);
     }
 
