@@ -1,5 +1,6 @@
-package br.com.fiap.postech.hackathon2024.gestaoclientes;
+package br.com.fiap.postech.hackathon2024.gestaoclientes.entities;
 
+import br.com.fiap.postech.hackathon2024.gestaoclientes.controllers.dto.DadosCadastroCliente;
 import jakarta.persistence.*;
 
 import lombok.Getter;
@@ -55,15 +56,15 @@ public class Cliente {
     private String email;
 
     public Cliente(DadosCadastroCliente dados) {
-        this.id = id;
-        this.paisDeOrigem = paisDeOrigem;
-        this.cpf = cpf;
-        this.passaporte = passaporte;
-        this.nomeCompleto = nomeCompleto;
-        this.dataNascimento = dataNascimento;
-        this.enderecoPaisOrigem = enderecoPaisOrigem;
-        this.telefone = telefone;
-        this.email = email;
+        this.id = dados.id();
+        this.paisDeOrigem = dados.paisDeOrigem();
+        this.cpf = dados.cpf();
+        this.passaporte = dados.passaporte();
+        this.nomeCompleto = dados.nomeCompleto();
+        this.dataNascimento = dados.dataNascimento();
+        this.enderecoPaisOrigem = dados.paisDeOrigem();
+        this.telefone = dados.telefone();
+        this.email = dados.email();
     }
 }
 

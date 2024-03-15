@@ -1,4 +1,4 @@
-package br.com.fiap.postech.hackathon2024.gestaoclientes;
+package br.com.fiap.postech.hackathon2024.gestaoclientes.controllers.dto;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.GeneratedValue;
