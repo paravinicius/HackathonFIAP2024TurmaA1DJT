@@ -1,5 +1,6 @@
 package br.com.fiap.postech.hackathon2024.gestaoreservas.entitites;
 
+import br.com.fiap.postech.hackathon2024.gestaoclientes.entities.Cliente;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -26,5 +27,9 @@ public class Reserva {
 
     @ElementCollection
     private List<Long> quartos = new ArrayList<>();
+
+    @ManyToOne
+    @JoinColumn(name = "cliente_id")
+    private Cliente cliente;
 
 }

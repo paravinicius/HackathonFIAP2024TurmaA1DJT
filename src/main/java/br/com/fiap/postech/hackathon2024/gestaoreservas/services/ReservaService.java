@@ -14,6 +14,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -58,10 +59,25 @@ public class ReservaService {
         return resultados;
     }
 
-    public BigDecimal calcularCustoDosQuartosDaReserva(List<Quarto> lista) {
-        return lista.stream()
-                .map(Quarto::getValorDiaria)
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
+    public BigDecimal calcularCustoDosQuartosDaReserva(Reserva reserva) {
+        LocalDate dataInicio = reserva.getDataInicio();
+        LocalDate dataFim = reserva.getDataFim();
+        long totalDias = ChronoUnit.DAYS.between(dataInicio, dataFim) + 1;
+
+        List<Long> idsQuartos = reserva.getQuartos();
+        List<Quarto> quartos = new ArrayList<>();
+        for (Long idQuarto : idsQuartos) {
+            Quarto quarto = quartoService.buscarQuartoPorId(idQuarto);
+            if (quarto != null) {
+                quartos.add(quarto);
+            }
+        }
+        double totalGeral = 0.0;
+        for (Quarto quarto : quartos) {
+            double totalQuarto = quarto.getValorDiaria().doubleValue() * totalDias;
+            totalGeral += totalQuarto;
+        }
+        return BigDecimal.valueOf(totalGeral);
     }
 
     public Reserva criarReserva() {

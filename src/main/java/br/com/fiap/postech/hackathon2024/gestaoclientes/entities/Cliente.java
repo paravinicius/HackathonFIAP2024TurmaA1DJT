@@ -1,6 +1,7 @@
 package br.com.fiap.postech.hackathon2024.gestaoclientes.entities;
 
 import br.com.fiap.postech.hackathon2024.gestaoclientes.controllers.dto.DadosCadastroCliente;
+import br.com.fiap.postech.hackathon2024.gestaoreservas.entitites.Reserva;
 import jakarta.persistence.*;
 
 import lombok.Getter;
@@ -9,6 +10,7 @@ import lombok.NonNull;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.List;
 
 
 @NoArgsConstructor
@@ -46,7 +48,6 @@ public class Cliente {
     @NonNull
     private String enderecoPaisOrigem;
 
-
     @Column(name = "telefone")
     @NonNull
     private String telefone;
@@ -55,6 +56,8 @@ public class Cliente {
     @NonNull
     private String email;
 
+    @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL)
+    private List<Reserva> reservas;
     public Cliente(DadosCadastroCliente dados) {
         this.id = dados.id();
         this.paisDeOrigem = dados.paisDeOrigem();

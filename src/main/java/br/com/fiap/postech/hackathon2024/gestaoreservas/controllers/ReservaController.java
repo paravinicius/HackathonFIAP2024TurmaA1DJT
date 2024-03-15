@@ -71,8 +71,8 @@ public class ReservaController {
 
     @GetMapping ("/{reservaId}/quartos/calcular-total")
     public ResponseEntity<String> calcularPrecoQuartosReserva(@PathVariable Long reservaId) {
-        List<Quarto> resultados = reservaService.recuperaQuartosReserva(reservaId);
-        var total = reservaService.calcularCustoDosQuartosDaReserva(resultados);
+        Reserva reserva = reservaService.buscarReservaPorId(reservaId).orElse(null);
+        var total = reservaService.calcularCustoDosQuartosDaReserva(reserva);
         return ResponseEntity.ok("O custo total dos quartos para esta reserva é de: R$" + total);
     }
 
