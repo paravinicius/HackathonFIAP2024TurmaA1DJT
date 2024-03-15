@@ -7,9 +7,12 @@ import br.com.fiap.postech.hackathon2024.gestaoservicositens.repositories.Servic
 import jakarta.persistence.EntityManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ReservaService {
@@ -20,13 +23,9 @@ public class ReservaService {
     @Autowired
     private final EntityManager entityManager;
 
-    @Autowired
-    private final ServicoItemRepository servicoItemRepository;
-
-    public ReservaService(ReservaRepository reservaRepository, EntityManager entityManager, ServicoItemRepository servicoItemRepository) {
+    public ReservaService(ReservaRepository reservaRepository, EntityManager entityManager) {
         this.reservaRepository = reservaRepository;
         this.entityManager = entityManager;
-        this.servicoItemRepository = servicoItemRepository;
     }
 
     public void adicionarItensServicosNaReserva(Long reservaId, List<Long> idsItensServicos) {
@@ -44,7 +43,11 @@ public class ReservaService {
         return reservaRepository.findAll();
     }
 
-    public List<ServicoItem> recuperaServicos(Long id) {
+    public Optional<Reserva> buscarReservaPorId(Long id) {
+        return reservaRepository.findById(id);
+    }
+
+    public List<ServicoItem> recuperaItensServicosPorReserva(Long id) {
         Reserva reserva = entityManager.find(Reserva.class, id);
         List<Long> idsItensServicos = reserva.getItensServicos();
         List<ServicoItem> resultados = new ArrayList<>();
@@ -53,5 +56,18 @@ public class ReservaService {
             resultados.add(servicoItem);
         }
         return resultados;
+    }
+
+    public BigDecimal calcularCustoDosServicosItensDaReserva(List<ServicoItem> lista) {
+        return lista.stream()
+                .map(ServicoItem::getValor)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+    }
+    @Transactional
+    public void atualizarReserva(Reserva reserva) {
+        if (reserva == null || reserva.getId() == null) {
+            throw new RuntimeException("Reserva inválida");
+        }
+        entityManager.merge(reserva);
     }
 }
