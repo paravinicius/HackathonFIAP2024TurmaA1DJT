@@ -1,5 +1,6 @@
 package br.com.fiap.postech.hackathon2024.gestaoreservas.controllers;
 
+import br.com.fiap.postech.hackathon2024.emailsender.EmailSenderService;
 import br.com.fiap.postech.hackathon2024.gestaoquarto.entities.Quarto;
 import br.com.fiap.postech.hackathon2024.gestaoquarto.services.QuartoService;
 import br.com.fiap.postech.hackathon2024.gestaoreservas.entitites.Reserva;
@@ -21,6 +22,9 @@ public class ReservaController {
 
     @Autowired
     private ReservaService reservaService;
+
+    @Autowired
+    private EmailSenderService emailSenderService;
 
     @Autowired
     private QuartoService quartoService;
@@ -70,6 +74,15 @@ public class ReservaController {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao adicionar quartos na reserva: " + e.getMessage());
         }
+    }
+
+    @GetMapping("/{reservaId}/finalizar")
+    public ResponseEntity<String> finalizarReserva(@PathVariable Long reservaId) {
+        Reserva reserva = reservaService.buscarReservaPorId(reservaId).orElse(null);
+        String textoFinal = reservaService.gerarTextoFinalReserva(reservaId);
+        emailSenderService.sendEmail(reserva.getCliente().getEmail(), "Reserva finalizada!", textoFinal);
+        System.out.println("E-mail sent!");
+        return ResponseEntity.ok().body(textoFinal);
     }
 
     @GetMapping ("/{reservaId}/quartos/calcular-total")
