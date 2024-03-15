@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -69,5 +70,18 @@ public class QuartoService {
             datasOcupadas.add(data);
         }
         quarto.setDatasOcupadas(datasOcupadas);
+    }
+
+    public List<Quarto> buscarQuartosDisponiveis(int totalPessoas, LocalDate dataInicio, LocalDate dataFim) {
+        List<Quarto> todosQuartos = quartoRepository.findAll();
+        List<Quarto> quartosDisponiveis = new ArrayList<>();
+
+        for (Quarto quarto : todosQuartos) {
+            if (quarto.getCapacidadeMaximaPessoas() >= totalPessoas && !quarto.isOcupado(dataInicio, dataFim)) {
+                quartosDisponiveis.add(quarto);
+            }
+        }
+
+        return quartosDisponiveis;
     }
 }

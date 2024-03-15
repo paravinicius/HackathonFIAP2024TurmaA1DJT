@@ -1,6 +1,7 @@
 package br.com.fiap.postech.hackathon2024.gestaoreservas.controllers;
 
 import br.com.fiap.postech.hackathon2024.gestaoquarto.entities.Quarto;
+import br.com.fiap.postech.hackathon2024.gestaoquarto.services.QuartoService;
 import br.com.fiap.postech.hackathon2024.gestaoreservas.entitites.Reserva;
 import br.com.fiap.postech.hackathon2024.gestaoreservas.services.ReservaService;
 import br.com.fiap.postech.hackathon2024.gestaoservicositens.entities.ServicoItem;
@@ -12,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
 import java.util.List;
 
 @RestController
@@ -21,6 +21,9 @@ public class ReservaController {
 
     @Autowired
     private ReservaService reservaService;
+
+    @Autowired
+    private QuartoService quartoService;
 
     @GetMapping
     public ResponseEntity<List<Reserva>> buscarTodasReservas() {
@@ -101,6 +104,16 @@ public class ReservaController {
         var dataFimLocalDate = LocalDate.parse(dataFim, DateTimeFormatter.ofPattern("dd-MM-yyyy"));
         reservaService.adicionarDatasNaReserva(reserva, dataInicioLocalDate, dataFimLocalDate);
         return ResponseEntity.ok("Datas de início e final adicionadas com sucesso na reserva");
+    }
+
+    @GetMapping("/pesquisa")
+    public ResponseEntity<List<Quarto>> pesquisarQuartosDisponiveis(
+            @RequestParam("totalPessoas") int totalPessoas,
+            @RequestParam("dataInicio") @DateTimeFormat(pattern = "dd-MM-yyyy") LocalDate dataInicio,
+            @RequestParam("dataFim") @DateTimeFormat(pattern = "dd-MM-yyyy") LocalDate dataFim) {
+
+        List<Quarto> quartosDisponiveis = quartoService.buscarQuartosDisponiveis(totalPessoas, dataInicio, dataFim);
+        return ResponseEntity.ok(quartosDisponiveis);
     }
 
 

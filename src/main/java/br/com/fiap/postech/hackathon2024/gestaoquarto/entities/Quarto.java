@@ -69,4 +69,13 @@ public class Quarto {
         this.tiposCamas = tiposCamas;
         this.tipoQuarto = tipoQuarto;
     }
+
+    public boolean isOcupado(LocalDate dataInicio, LocalDate dataFim) {
+        for (LocalDate data = dataInicio; !data.isAfter(dataFim); data = data.plusDays(1)) {
+            if (datasOcupadas.contains(data)) {
+                return true;
+            }
+        }
+        return false;
+    }
 }
