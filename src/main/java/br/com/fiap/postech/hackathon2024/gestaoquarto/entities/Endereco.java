@@ -18,7 +18,7 @@ public class Endereco {
     private Integer id;
     @NotEmpty(message = "O logradouro deve ser informado.")
     private String logradouro;
-    @NotEmpty(message = "O CEP deve ser informado.")
+    //@NotEmpty(message = "O CEP deve ser informado.")
     @jakarta.validation.constraints.Pattern(
         regexp = "\\d{5}-\\d{3}",
         message = "O CEP deve seguir o formato 00000-000."
