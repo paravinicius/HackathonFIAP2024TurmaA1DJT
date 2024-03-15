@@ -1,7 +1,6 @@
 package br.com.fiap.postech.hackathon2024.gestaoquarto.controllers;
 
 import br.com.fiap.postech.hackathon2024.gestaoquarto.entities.Endereco;
-import br.com.fiap.postech.hackathon2024.gestaoquarto.entities.Quarto;
 import br.com.fiap.postech.hackathon2024.gestaoquarto.services.EnderecoService;
 import br.com.fiap.postech.hackathon2024.gestaoservicositens.exceptions.ServicoItemNaoEncontradoException;
 import org.springframework.beans.factory.annotation.Autowired;
