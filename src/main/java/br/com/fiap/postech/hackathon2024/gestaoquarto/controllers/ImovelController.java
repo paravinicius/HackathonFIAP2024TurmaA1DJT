@@ -1,6 +1,7 @@
 package br.com.fiap.postech.hackathon2024.gestaoquarto.controllers;
 
 import br.com.fiap.postech.hackathon2024.gestaoquarto.entities.Imovel;
+import br.com.fiap.postech.hackathon2024.gestaoquarto.exceptions.QuartoNaoEncontradoException;
 import br.com.fiap.postech.hackathon2024.gestaoquarto.services.ImovelService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,7 +23,10 @@ public class ImovelController {
 
     @PostMapping
     public ResponseEntity<Imovel> criarEndereco(@RequestBody Imovel imovelRequest) {
+
         Imovel imovelNovo = imovelService.criarImovel(imovelRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body(imovelNovo);
+
+
     }
 }

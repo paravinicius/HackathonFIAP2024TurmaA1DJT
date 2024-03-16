@@ -61,7 +61,7 @@ public class QuartoController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletarQuarto(@PathVariable Long id) {
+    public ResponseEntity<Void> deletarQuarto(@PathVariable Long id) throws QuartoNaoEncontradoException {
         try {
             quartoService.deletarQuarto(id);
             return ResponseEntity.noContent().build();

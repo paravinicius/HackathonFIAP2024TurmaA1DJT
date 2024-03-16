@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.List;
 
@@ -11,6 +12,7 @@ import java.util.List;
 @Table(name = "imoveis")
 @NoArgsConstructor
 @Getter
+@Setter
 public class Imovel {
 
     @Id
